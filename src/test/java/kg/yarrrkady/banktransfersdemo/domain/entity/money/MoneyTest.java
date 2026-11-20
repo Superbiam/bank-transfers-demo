@@ -183,6 +183,36 @@ class MoneyTest {
         assertThat(result.currency()).isEqualTo(USD);
     }
 
+    @Test
+    void addShouldRejectNullOperand() {
+        Money money = Money.of("10.00", "USD");
+
+        assertDomainError(
+            () -> money.add(null),
+            InvalidMoneyException.class, 
+            InvalidMoneyException.CODE
+        );
+    }
+
+    @Test
+    void subtractShouldRejectNullOperand() {
+        Money money = Money.of("10.00", "USD");
+
+        assertDomainError(
+            () -> money.subtract(null),
+            InvalidMoneyException.class,
+            InvalidMoneyException.CODE
+        );
+    }
+
+    @Test
+    void compareToShouldRejectNullOperand() {
+        Money money = Money.of("10.00", "USD");
+
+        assertThatThrownBy(() -> money.compareTo(null))
+            .isInstanceOf(NullPointerException.class);
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"0", "0.00", "-5.00", "123456789012345678"})
     void ofShouldAcceptPlainDecimalFormat(String amount) {

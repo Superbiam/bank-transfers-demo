@@ -3,6 +3,7 @@ package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
@@ -40,17 +41,20 @@ public record Money(BigDecimal amount, Currency currency) implements Comparable<
     }
 
     public Money add(Money other) {
+        requireMoney(other);
         validateCurrencyMatch(other, "add");
         return new Money(this.amount.add(other.amount), this.currency);
     }
 
     public Money subtract(Money other) {
+        requireMoney(other);
         validateCurrencyMatch(other, "subtract");
         return new Money(this.amount.subtract(other.amount), this.currency);
     }
 
     @Override 
     public int compareTo(Money other) {
+        Objects.requireNonNull(other, "other");
         validateCurrencyMatch(other, "compare");
         return this.amount.compareTo(other.amount);
     }
@@ -67,4 +71,10 @@ public record Money(BigDecimal amount, Currency currency) implements Comparable<
             );
         }
     }
+
+    private static void requireMoney(Money other) {
+        if (other == null) {
+            throw new InvalidMoneyException("Money must not be null");
+        }
+    } 
 }
