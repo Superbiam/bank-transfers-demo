@@ -1,11 +1,11 @@
-package kg.yarrrkady.banktransfersdemo.Domain.Entities.Money;
+package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 
 import java.util.Currency;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import kg.yarrrkady.banktransfersdemo.Domain.Exceptions.Money.InvalidMoneyException;
+import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
 
 public final class SupportedCurrencies {
     private static final Map<String, Currency> SUPPORTED_CURRENCIES = 

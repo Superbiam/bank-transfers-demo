@@ -1,4 +1,4 @@
-package kg.yarrrkady.banktransfersdemo.Domain.Exceptions;
+package kg.yarrrkady.banktransfersdemo.domain.exception;
 
 public abstract class DomainException extends RuntimeException {
     private final String code;

@@ -1,6 +1,6 @@
-package kg.yarrrkady.banktransfersdemo.Domain.Exceptions.Money;
+package kg.yarrrkady.banktransfersdemo.domain.exception.money;
 
-import kg.yarrrkady.banktransfersdemo.Domain.Exceptions.DomainException;
+import kg.yarrrkady.banktransfersdemo.domain.exception.DomainException;
 
 public class InvalidMoneyException extends DomainException {
 

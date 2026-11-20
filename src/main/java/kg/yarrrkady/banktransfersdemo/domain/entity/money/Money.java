@@ -1,11 +1,11 @@
-package kg.yarrrkady.banktransfersdemo.Domain.Entities.Money;
+package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 
-import kg.yarrrkady.banktransfersdemo.Domain.Exceptions.Money.CurrencyMismatchException;
-import kg.yarrrkady.banktransfersdemo.Domain.Exceptions.Money.InvalidMoneyException;
+import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
+import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
 
 public record Money(BigDecimal amount, Currency currency) implements Comparable<Money> {
     public Money {
