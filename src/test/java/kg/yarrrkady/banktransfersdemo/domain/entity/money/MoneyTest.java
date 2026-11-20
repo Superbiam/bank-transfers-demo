@@ -219,6 +219,36 @@ class MoneyTest {
         assertThat(Money.of(amount, "USD")).isNotNull();
     }
 
+    @ParameterizedTest
+    @CsvSource({"USD,0.00", "EUR,0.00", "JPY,0", "KWD,0.000"})
+    void zeroShouldHaveScaleOfCurrency(String code, String expected) {
+        Money zero = Money.zero(Currency.getInstance(code));
+
+        assertThat(zero.amount()).isEqualTo(new BigDecimal(expected));
+    }
+
+    @Test
+    void zeroShouldEqualParsedZero() {
+        assertThat(Money.zero(USD)).isEqualTo(Money.of("0.00", "USD"));
+    }
+
+    @Test
+    void zeroShouldRejectNullAndUnsupportedCurrency() {
+        assertDomainError(() -> Money.zero(null),
+                InvalidMoneyException.class, InvalidMoneyException.CODE);
+        assertDomainError(() -> Money.zero(Currency.getInstance("XAU")),
+                InvalidMoneyException.class, InvalidMoneyException.CODE);
+    }
+
+    @Test
+    void isZeroAndIsNegativeShouldRespectSign() {
+        assertThat(Money.of("0.00", "USD").isZero()).isTrue();
+        assertThat(Money.of("0.01", "USD").isZero()).isFalse();
+        assertThat(Money.of("-0.01", "USD").isNegative()).isTrue();
+        assertThat(Money.of("0.00", "USD").isNegative()).isFalse();
+        assertThat(Money.of("1.00", "USD").isNegative()).isFalse();
+    }
+
     private static void assertDomainError(ThrowingCallable call, Class<? extends DomainException> type, String code) {
         assertThatThrownBy(call)
             .isInstanceOfSatisfying(type, e -> assertThat(e.getCode()).isEqualTo(code));
