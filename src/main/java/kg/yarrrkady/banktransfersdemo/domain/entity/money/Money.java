@@ -3,11 +3,15 @@ package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
+import java.util.regex.Pattern;
 
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
 
 public record Money(BigDecimal amount, Currency currency) implements Comparable<Money> {
+
+    private static final Pattern PLAIN_DECIMAL = Pattern.compile("-?\\d{1,18}(\\.\\d{1,4})?");
+
     public Money {
         if (amount == null) {
             throw new InvalidMoneyException("Amount must not be null");
@@ -27,15 +31,12 @@ public record Money(BigDecimal amount, Currency currency) implements Comparable<
             throw new InvalidMoneyException("Amount must not be null");
         }
         Currency currency = SupportedCurrencies.require(currencyCode);
-        BigDecimal decimalAmount;
-        try {
-            decimalAmount = new BigDecimal(amount);
-        } catch (NumberFormatException e) {
+        if (!PLAIN_DECIMAL.matcher(amount).matches()) {
             throw new InvalidMoneyException(
-                "Invalid amount format: " + amount, e
+                "Invalid amount format: " + amount
             );
         }
-        return new Money(decimalAmount, currency);
+        return new Money(new BigDecimal(amount), currency);
     }
 
     public Money add(Money other) {
