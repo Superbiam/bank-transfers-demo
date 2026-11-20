@@ -6,7 +6,7 @@ public class InsufficientFundsException extends DomainException {
 
     public static final String CODE = "INSUFFICIENT_FUNDS";
 
-    protected InsufficientFundsException(String message) {
+    public InsufficientFundsException(String message) {
         super(CODE, message);
     }
     

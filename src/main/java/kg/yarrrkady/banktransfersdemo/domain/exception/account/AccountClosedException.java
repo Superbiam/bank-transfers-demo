@@ -6,7 +6,7 @@ public class AccountClosedException extends DomainException {
 
     public static final String CODE = "ACCOUNT_CLOSED";
 
-    protected AccountClosedException( String message) {
+    public AccountClosedException( String message) {
         super(CODE, message);
     }
     
