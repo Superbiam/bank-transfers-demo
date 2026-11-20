@@ -6,6 +6,7 @@ import java.util.Currency;
 
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidExchangeRateException;
+import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
 
 public record ExchangeRate(Currency from, Currency to, BigDecimal rate) {
 
@@ -40,6 +41,9 @@ public record ExchangeRate(Currency from, Currency to, BigDecimal rate) {
     }
     
     public Money convert(Money source) {
+        if (source == null) {
+            throw new InvalidMoneyException("Money must not be null");
+        }
         if (!source.currency().equals(from)) {
             throw new CurrencyMismatchException(
                 "Rate is for %s but money is in %s".formatted(from.getCurrencyCode(), source.currency().getCurrencyCode())
