@@ -1,18 +1,16 @@
 package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static kg.yarrrkady.banktransfersdemo.support.DomainAssertions.assertDomainError;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kg.yarrrkady.banktransfersdemo.domain.exception.DomainException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidExchangeRateException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
@@ -166,10 +164,5 @@ public class ExchangeRateTest {
     void rateShouldNotBeEqualWithDifferentSourceCurrency() {
         assertThat(new ExchangeRate(USD, KGS, new BigDecimal("87.5")))
             .isNotEqualTo(new ExchangeRate(EUR, KGS, new BigDecimal("87.5")));
-    }
-
-    private static void assertDomainError(ThrowingCallable call, Class<? extends DomainException> type, String code) {
-        assertThatThrownBy(call)
-            .isInstanceOfSatisfying(type, e -> assertThat(e.getCode()).isEqualTo(code));
     }
 }

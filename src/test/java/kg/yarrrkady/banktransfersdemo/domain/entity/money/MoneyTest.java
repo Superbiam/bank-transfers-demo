@@ -1,12 +1,10 @@
 package kg.yarrrkady.banktransfersdemo.domain.entity.money;
 
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kg.yarrrkady.banktransfersdemo.domain.exception.DomainException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.CurrencyMismatchException;
 import kg.yarrrkady.banktransfersdemo.domain.exception.money.InvalidMoneyException;
 
@@ -15,6 +13,7 @@ import java.util.Currency;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static kg.yarrrkady.banktransfersdemo.support.DomainAssertions.assertDomainError;
 
 class MoneyTest {
 
@@ -247,10 +246,5 @@ class MoneyTest {
         assertThat(Money.of("-0.01", "USD").isNegative()).isTrue();
         assertThat(Money.of("0.00", "USD").isNegative()).isFalse();
         assertThat(Money.of("1.00", "USD").isNegative()).isFalse();
-    }
-
-    private static void assertDomainError(ThrowingCallable call, Class<? extends DomainException> type, String code) {
-        assertThatThrownBy(call)
-            .isInstanceOfSatisfying(type, e -> assertThat(e.getCode()).isEqualTo(code));
     }
 }
