@@ -40,6 +40,10 @@ public record Money(BigDecimal amount, Currency currency) implements Comparable<
         return new Money(new BigDecimal(amount), currency);
     }
 
+    public static Money zero(Currency currency) {
+        return new Money(BigDecimal.ZERO, currency);
+    }
+
     public Money add(Money other) {
         requireMoney(other);
         validateCurrencyMatch(other, "add");
@@ -59,9 +63,11 @@ public record Money(BigDecimal amount, Currency currency) implements Comparable<
         return this.amount.compareTo(other.amount);
     }
     
-    public boolean isPositive() {
-        return this.amount.compareTo(BigDecimal.ZERO) > 0;
-    }
+    public boolean isPositive() { return amount.signum() > 0; }
+
+    public boolean isZero()     { return amount.signum() == 0; }
+
+    public boolean isNegative() { return amount.signum() < 0; }
 
     private void validateCurrencyMatch(Money other, String operation) {
         if (!this.currency.equals(other.currency)) {
