@@ -72,7 +72,7 @@ public class Account {
         status = AccountStatus.CLOSED;
     }
 
-    private void requireActive() {
+    public void requireActive() {
         if (status != AccountStatus.ACTIVE) {
             throw new AccountClosedException("Account " + accountNumber + " is closed");
         }
@@ -106,6 +106,10 @@ public class Account {
 
     public long getVersion() {
         return version;
+    }
+
+    public Currency getCurrency() {
+        return balance.currency();
     }
 
 }
