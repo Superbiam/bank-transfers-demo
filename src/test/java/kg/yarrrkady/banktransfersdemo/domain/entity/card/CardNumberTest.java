@@ -77,4 +77,27 @@ public class CardNumberTest {
             .isEqualTo("411111******1111")
             .doesNotContain("4111111111111111");
     }
+
+    @ParameterizedTest
+    @CsvSource({
+        "4222222222222,    422222, 2222, 13",
+        "378282246310005,  378282, 0005, 15",
+        "4111111111111111, 411111, 1111, 16"
+    })
+    void shouldExposeBinLast4AndLength(String pan, String bin, String last4, int length) {
+        CardNumber number = new CardNumber(pan);
+
+        assertThat(number.bin()).isEqualTo(bin);
+        assertThat(number.last4()).isEqualTo(last4);
+        assertThat(number.length()).isEqualTo(length);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"4222222222222", "378282246310005", "4111111111111111"})
+    void maskShouldRoundTripFromStoredParts(String pan) {
+        CardNumber number = new CardNumber(pan);
+
+        assertThat(CardNumber.mask(number.bin(), number.last4(), number.length()))
+            .isEqualTo(number.masked());
+    }
 }

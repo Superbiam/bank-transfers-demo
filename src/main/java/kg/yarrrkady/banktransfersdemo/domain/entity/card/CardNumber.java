@@ -7,6 +7,8 @@ import kg.yarrrkady.banktransfersdemo.domain.exception.card.InvalidCardNumberExc
 public record CardNumber(String value) {
 
     private static final Pattern DIGITS = Pattern.compile("\\d{13,19}");
+    private static final int BIN_LENGTH = 6;
+    private static final int LAST4_LENGTH = 4;
     
     public CardNumber {
         if (value == null || !DIGITS.matcher(value).matches() || !passesLuhn(value)) {
@@ -14,10 +16,24 @@ public record CardNumber(String value) {
         }
     }
 
+    public String bin() {
+        return value.substring(0, BIN_LENGTH);
+    }
+
+    public String last4() {
+        return value.substring(value.length() - LAST4_LENGTH);
+    }
+
+    public int length() {
+        return value.length();
+    }
+
     public String masked() {
-        return value.substring(0,6)
-            + "*".repeat(value.length() - 10)
-            + value.substring(value.length() - 4);
+        return mask(bin(), last4(), length());
+    }
+
+    public static String mask(String bin, String last4, int length) {
+        return bin + "*".repeat(length - BIN_LENGTH - LAST4_LENGTH) + last4;
     }
 
     @Override
